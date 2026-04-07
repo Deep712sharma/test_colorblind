@@ -17,6 +17,7 @@ Usage:
 
 import os
 import sys
+import random
 from pathlib import Path
 
 repo_root = Path(__file__).resolve().parent.parent
@@ -87,9 +88,9 @@ def build_gradio_app(web_manager, action_fields, metadata, is_chat_env, title, q
                 
                 with gr.Group():
                     mode_radio = gr.Radio(
-                        ["easy", "medium", "hard"], 
+                        ["random", "easy", "medium", "hard"], 
                         label="Difficulty Mode", 
-                        value="easy"
+                        value="random"
                     )
                     
                     cb_type_easy = gr.Dropdown(
@@ -168,6 +169,10 @@ def build_gradio_app(web_manager, action_fields, metadata, is_chat_env, title, q
                 updates[cb_type_medium] = gr.update(visible=True)
             elif mode == "hard":
                 updates[inputs_dict["target"]] = gr.update(placeholder="Class A, Class B, Class C, Class D, Class E, Class F, Class G, Class H, Class I, Class J")
+            elif mode == "random":
+                updates[inputs_dict["target"]] = gr.update(placeholder="Select categories (depends on random mode)")
+                updates[cb_type_easy] = gr.update(visible=False)
+                updates[cb_type_medium] = gr.update(visible=False)
             
             return [
                 updates[cb_type_easy],
@@ -224,16 +229,23 @@ def build_gradio_app(web_manager, action_fields, metadata, is_chat_env, title, q
             }
             
             cb_types = None
-            if mode == "easy":
+            actual_mode = mode
+            if mode == "random":
+                actual_mode = random.choice(["easy", "medium", "hard"])
+                cb_types = None # Environment will sample randomly
+            elif mode == "easy":
                 cb_types = [cb_mapping.get(cb_easy, cb_easy)]
             elif mode == "medium":
                 parts = cb_medium.split(" and ")
                 cb_types = [cb_mapping.get(p.strip(), p.strip()) for p in parts]
             
             try:
-                observation = current_env.reset(task=mode, cb_types=cb_types)
+                observation = current_env.reset(task=actual_mode, cb_types=cb_types)
                 data = serialize_observation(observation)
-                return extract_img(data), clean_json(data), f"Environment reset to {mode} mode with {cb_types} successfully.", current_env
+                status_msg = f"Environment reset to {actual_mode} mode successfully."
+                if mode == "random":
+                    status_msg = f"Environment reset (Random -> {actual_mode}) successfully."
+                return extract_img(data), clean_json(data), status_msg, current_env
             except Exception as e:
                 import traceback
                 traceback.print_exc()
