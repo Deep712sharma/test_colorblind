@@ -87,8 +87,7 @@ def build_gradio_app(web_manager, action_fields, metadata, is_chat_env, title, q
                     mode_radio = gr.Radio(
                         ["easy", "medium", "hard"], 
                         label="Difficulty Mode", 
-                        value="easy",
-                        info="Easy: 2 categories, Medium: 5 categories, Hard: 10 categories"
+                        value="easy"
                     )
                     
                     cb_type_easy = gr.Dropdown(
@@ -124,11 +123,10 @@ def build_gradio_app(web_manager, action_fields, metadata, is_chat_env, title, q
                                 visible=False # Hidden in easy
                             )
                         elif name == "change_shape":
-                            inputs_dict[name] = gr.Dropdown(
-                                choices=["o", "^", "*", "x", "+", "p", "s"], 
-                                label=label, 
-                                value="o",
-                                visible=False
+                            inputs_dict[name] = gr.Textbox(
+                                label="Shape", 
+                                placeholder="O, X, ^, +, s, p, *",
+                                visible=True
                             )
                         elif name == "change_hex":
                             inputs_dict[name] = gr.Textbox(label=label, placeholder=ph, visible=True)
@@ -153,14 +151,18 @@ def build_gradio_app(web_manager, action_fields, metadata, is_chat_env, title, q
             updates[cb_type_medium] = gr.update(visible=False)
             
             if mode == "easy":
+                updates[inputs_dict["target"]] = gr.update(placeholder="Class A, Class B")
                 updates[inputs_dict["fix_type"]] = gr.update(visible=False, value="recolor")
                 updates[inputs_dict["change_hex"]] = gr.update(visible=True)
-                updates[inputs_dict["change_shape"]] = gr.update(visible=False)
+                updates[inputs_dict["change_shape"]] = gr.update(visible=True)
                 updates[cb_type_easy] = gr.update(visible=True)
             else:
                 updates[inputs_dict["fix_type"]] = gr.update(visible=True)
                 if mode == "medium":
+                    updates[inputs_dict["target"]] = gr.update(placeholder="Class A, Class B, Class C, Class D, Class E")
                     updates[cb_type_medium] = gr.update(visible=True)
+                elif mode == "hard":
+                    updates[inputs_dict["target"]] = gr.update(placeholder="Class A, Class B, Class C, Class D, Class E, Class F, Class G, Class H, Class I, Class J")
                 
                 if fix_type == "recolor":
                     updates[inputs_dict["change_hex"]] = gr.update(visible=True)
@@ -174,19 +176,20 @@ def build_gradio_app(web_manager, action_fields, metadata, is_chat_env, title, q
                 updates[cb_type_medium],
                 updates[inputs_dict["fix_type"]], 
                 updates[inputs_dict["change_hex"]], 
-                updates[inputs_dict["change_shape"]]
+                updates[inputs_dict["change_shape"]],
+                updates[inputs_dict["target"]]
             ]
 
         mode_radio.change(
             fn=update_ui_visibility,
             inputs=[mode_radio, inputs_dict["fix_type"]],
-            outputs=[cb_type_easy, cb_type_medium, inputs_dict["fix_type"], inputs_dict["change_hex"], inputs_dict["change_shape"]]
+            outputs=[cb_type_easy, cb_type_medium, inputs_dict["fix_type"], inputs_dict["change_hex"], inputs_dict["change_shape"], inputs_dict["target"]]
         )
         
         inputs_dict["fix_type"].change(
             fn=update_ui_visibility,
             inputs=[mode_radio, inputs_dict["fix_type"]],
-            outputs=[cb_type_easy, cb_type_medium, inputs_dict["fix_type"], inputs_dict["change_hex"], inputs_dict["change_shape"]]
+            outputs=[cb_type_easy, cb_type_medium, inputs_dict["fix_type"], inputs_dict["change_hex"], inputs_dict["change_shape"], inputs_dict["target"]]
         )
 
         def extract_img(data):
