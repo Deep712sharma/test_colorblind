@@ -153,8 +153,12 @@ def build_gradio_app(web_manager, action_fields, metadata, is_chat_env, title, q
             updates[cb_type_medium] = gr.update(visible=False)
             
             updates[inputs_dict["fix_type"]] = gr.update(visible=True)
-            updates[inputs_dict["change_hex"]] = gr.update(visible=True)
-            updates[inputs_dict["change_shape"]] = gr.update(visible=True)
+            if fix_type == "recolor":
+                updates[inputs_dict["change_hex"]] = gr.update(visible=True)
+                updates[inputs_dict["change_shape"]] = gr.update(visible=False)
+            else:
+                updates[inputs_dict["change_hex"]] = gr.update(visible=False)
+                updates[inputs_dict["change_shape"]] = gr.update(visible=True)
             
             if mode == "easy":
                 updates[inputs_dict["target"]] = gr.update(placeholder="Class A, Class B")
