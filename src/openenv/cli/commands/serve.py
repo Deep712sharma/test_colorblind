@@ -29,7 +29,7 @@ def serve(
     port: Annotated[
         int,
         typer.Option("--port", "-p", help="Port to serve on"),
-    ] = 8000,
+    ] = 7860,
     host: Annotated[
         str,
         typer.Option("--host", help="Host to bind to"),

@@ -640,7 +640,7 @@ README_EOF
 ---
 title: ${env_name} Environment
 sdk: docker
-app_port: 8000
+app_port: 7860
 base_path: /web
 tags:
   - $HUB_TAG
