@@ -120,7 +120,7 @@ def build_gradio_app(web_manager, action_fields, metadata, is_chat_env, title, q
                                 choices=["recolor", "reshape"], 
                                 label=label, 
                                 value="recolor",
-                                visible=False # Hidden in easy
+                                visible=True 
                             )
                         elif name == "change_shape":
                             inputs_dict[name] = gr.Textbox(
@@ -150,26 +150,22 @@ def build_gradio_app(web_manager, action_fields, metadata, is_chat_env, title, q
             updates[cb_type_easy] = gr.update(visible=False)
             updates[cb_type_medium] = gr.update(visible=False)
             
+            updates[inputs_dict["fix_type"]] = gr.update(visible=True)
+            if fix_type == "recolor":
+                updates[inputs_dict["change_hex"]] = gr.update(visible=True)
+                updates[inputs_dict["change_shape"]] = gr.update(visible=False)
+            else:
+                updates[inputs_dict["change_hex"]] = gr.update(visible=False)
+                updates[inputs_dict["change_shape"]] = gr.update(visible=True)
+            
             if mode == "easy":
                 updates[inputs_dict["target"]] = gr.update(placeholder="Class A, Class B")
-                updates[inputs_dict["fix_type"]] = gr.update(visible=False, value="recolor")
-                updates[inputs_dict["change_hex"]] = gr.update(visible=True)
-                updates[inputs_dict["change_shape"]] = gr.update(visible=True)
                 updates[cb_type_easy] = gr.update(visible=True)
-            else:
-                updates[inputs_dict["fix_type"]] = gr.update(visible=True)
-                if mode == "medium":
-                    updates[inputs_dict["target"]] = gr.update(placeholder="Class A, Class B, Class C, Class D, Class E")
-                    updates[cb_type_medium] = gr.update(visible=True)
-                elif mode == "hard":
-                    updates[inputs_dict["target"]] = gr.update(placeholder="Class A, Class B, Class C, Class D, Class E, Class F, Class G, Class H, Class I, Class J")
-                
-                if fix_type == "recolor":
-                    updates[inputs_dict["change_hex"]] = gr.update(visible=True)
-                    updates[inputs_dict["change_shape"]] = gr.update(visible=False)
-                else:
-                    updates[inputs_dict["change_hex"]] = gr.update(visible=False)
-                    updates[inputs_dict["change_shape"]] = gr.update(visible=True)
+            elif mode == "medium":
+                updates[inputs_dict["target"]] = gr.update(placeholder="Class A, Class B, Class C, Class D, Class E")
+                updates[cb_type_medium] = gr.update(visible=True)
+            elif mode == "hard":
+                updates[inputs_dict["target"]] = gr.update(placeholder="Class A, Class B, Class C, Class D, Class E, Class F, Class G, Class H, Class I, Class J")
             
             return [
                 updates[cb_type_easy],
