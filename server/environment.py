@@ -238,7 +238,7 @@ class CBAEnvironment(Environment):
 
 
 
-    def reset(self, task: str = "easy") -> CBAObservation:
+    def reset(self, task: str = "easy", cb_types: list = None) -> CBAObservation:
         """
         Reset the environment.
 
