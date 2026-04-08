@@ -21,7 +21,12 @@ tasks:
       across the single CB simulation. Expected score: 0.85–0.95.
     difficulty: easy
     has_grader: true
+<<<<<<< HEAD
     grader: graders.easy:EasyGrader
+=======
+    grader:
+      type: graders.easy:EasyGrader
+>>>>>>> 1380e500462a51ce537bcbd6ffb47017faa3a62b
 
   - id: task_medium
     name: Handle overlapping colors
@@ -33,7 +38,12 @@ tasks:
       Expected score: 0.60–0.80.
     difficulty: medium
     has_grader: true
+<<<<<<< HEAD
     grader: graders.medium:MediumGrader
+=======
+    grader:
+      type: graders.medium:MediumGrader
+>>>>>>> 1380e500462a51ce537bcbd6ffb47017faa3a62b
 
   - id: task_hard
     name: Optimize full plot accessibility
@@ -45,7 +55,12 @@ tasks:
       Expected score: 0.30–0.50.
     difficulty: hard
     has_grader: true
+<<<<<<< HEAD
     grader: graders.hard:HardGrader
+=======
+    grader:
+      type: graders.hard:HardGrader
+>>>>>>> 1380e500462a51ce537bcbd6ffb47017faa3a62b
 
 metadata:
   domain: ai
