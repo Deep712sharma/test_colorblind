@@ -259,8 +259,10 @@ class CBAEnvironment(Environment):
         if task is None:
             self.task = random.choice(['easy', 'medium', 'hard'])
         else:
-            assert task in ['easy', 'medium', 'hard'], "task value must be from ['easy', 'medium', 'hard']"
-            self.task = task
+            # Handle IDs from openenv.yaml (e.g. task_easy)
+            normalized_task = task.replace("task_", "")
+            assert normalized_task in ['easy', 'medium', 'hard'], f"task value '{task}' must be from ['easy', 'medium', 'hard'] or prefixed with 'task_'"
+            self.task = normalized_task
         
         self.task_config = TASK_CONFIGS[self.task]
         self.steps_taken = 0

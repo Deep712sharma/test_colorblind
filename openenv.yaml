@@ -12,19 +12,20 @@ description: |
   distinguishable under deuteranopia, protanopia, and tritanopia.
 
 tasks:
-  - id: easy
+  - id: task_easy
     name: Fix color contrast
+    max_steps: 10
     description: >
       Fix a scatter plot with 2 color-confused categories for one colorblind type
       (deuteranopia). Agent must recolor only. Grader checks CIEDE2000 delta-E
       across the single CB simulation. Expected score: 0.85–0.95.
     difficulty: easy
     has_grader: true
-    grader:
-      type: graders.EasyGrader
+    grader: graders.easy:EasyGrader
 
-  - id: medium
+  - id: task_medium
     name: Handle overlapping colors
+    max_steps: 20
     description: >
       Fix a scatter plot with 5 similar colors affecting two colorblind types.
       Agent may recolor or change shapes; color is primary. Soft action budget —
@@ -32,11 +33,11 @@ tasks:
       Expected score: 0.60–0.80.
     difficulty: medium
     has_grader: true
-    grader:
-      type: graders.MediumGrader
+    grader: graders.medium:MediumGrader
 
-  - id: hard
+  - id: task_hard
     name: Optimize full plot accessibility
+    max_steps: 30
     description: >
       Fix a scatter plot with 10 similar colors across three colorblind types.
       Agent must recolor and change shapes within a strict action budget. Efficiency
@@ -44,8 +45,7 @@ tasks:
       Expected score: 0.30–0.50.
     difficulty: hard
     has_grader: true
-    grader:
-      type: graders.HardGrader
+    grader: graders.hard:HardGrader
 
 metadata:
   domain: ai
